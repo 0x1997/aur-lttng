@@ -1,0 +1,40 @@
+# Maintainer: Philippe Proulx <pproulx@efficios.com>
+# Contributor: Manuel Mendez <mmendez534 at gmail dot com>
+
+_pkgbase=lttng-tools
+pkgname=lttng-tools-zen
+pkgver=2.8.0
+pkgrel=1
+pkgdesc="LTTng tracing control tools"
+arch=('i686' 'x86_64')
+url="http://lttng.org/"
+license=('GPL2' 'LGPL2.1')
+provides=('lttng')
+source=(http://lttng.org/files/${_pkgbase}/${_pkgbase}-$pkgver.tar.bz2)
+depends=(
+    'popt'
+    'liburcu>=0.7.2'
+    'lttng-ust-zen>=2.8.0'
+    'linux-zen>=2.6.27'
+    'libxml2>=2.7.6'
+)
+optdepends=(
+    'lttng-modules-zen: kernel tracing support'
+    'babeltrace: view traces with `lttng view` command'
+    'man-db: view man pages with the `lttng help` command'
+)
+options=('!libtool')
+sha1sums=('8e6e123d1879c0816eb2cd83f21257af355ef2a3')
+
+build()
+{
+    cd ${srcdir}/${_pkgbase}-${pkgver}
+    ./configure --prefix=/usr
+    make
+}
+
+package()
+{
+    cd ${srcdir}/${_pkgbase}-${pkgver}
+    make install DESTDIR=${pkgdir}
+}
